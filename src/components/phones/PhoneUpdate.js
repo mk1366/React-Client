@@ -11,18 +11,24 @@ class PhoneUpdate extends Component {
     super()
 
     this.state = {
-      model: '',
-      state: '',
-      company: '',
-      description: '',
-      price: '',
-      createdId: null,
-      phone: null
+      phone: {
+        model: '',
+        state: '',
+        company: '',
+        description: '',
+        price: '',
+        updated: null
+      }
     }
   }
 
   componentDidMount () {
-    axios(`${apiUrl}/phones/${this.props.match.params.id}`)
+    axios({
+      url: `${apiUrl}/phones/${this.props.match.params.id}`,
+      headers: {
+        'Authorization': `Token token=${this.props.user.token}`
+      }
+    })
       .then(res => this.setState({ phone: res.data.phone }))
       .catch(console.error)
   }
@@ -32,23 +38,26 @@ class PhoneUpdate extends Component {
 
     const updatedPhone = Object.assign(this.state.phone, updatedField)
 
-    this.setState({ phones: updatedPhone })
+    this.setState({ phone: updatedPhone })
   }
 
   handleSubmit = event => {
     event.preventDefault()
 
     axios({
-      url: `${apiUrl}/movies/${this.props.match.params.id}`,
+      url: `${apiUrl}/phones/${this.props.match.params.id}`,
       method: 'PATCH',
-      data: { movie: this.state.phones }
+      headers: {
+        'Authorization': `Token token=${this.props.user.token}`
+      },
+      data: { phone: this.state.phone }
     })
       .then(() => this.setState({ updated: true }))
       .catch(console.error)
   }
 
   render () {
-    const { phone, updated } = this.state
+    const { updated } = this.state
     const { handleChange, handleSubmit } = this
 
     if (updated) {
@@ -59,13 +68,13 @@ class PhoneUpdate extends Component {
       <Fragment>
         <h1>Create!</h1>
         <PhoneForm
-          model={this.state.model}
-          state={this.state.state}
-          company={this.state.company}
-          description={this.state.description}
-          price={this.state.price}
-          handleSubmit={this.handleSubmit}
-          handleChange={this.handleChange}
+          model={this.state.phone.model}
+          state={this.state.phone.state}
+          company={this.state.phone.company}
+          description={this.state.phone.description}
+          price={this.state.phone.price}
+          handleSubmit={handleSubmit}
+          handleChange={handleChange}
           cancelPath={'/phones'}
         />
       </Fragment>

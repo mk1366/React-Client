@@ -45,7 +45,7 @@ class PhoneCreate extends Component {
       }
     })
       .then(response => this.setState({
-        phone: response.data.phone
+        createdId: response.data.phone._id
       }))
       .catch(console.error)
   }

@@ -14,7 +14,12 @@ class Phones extends Component {
   }
 
   componentDidMount () {
-    axios(`${apiUrl}/movies`)
+    axios({
+      url: `${apiUrl}/phones`,
+      headers: {
+        'Authorization': `Token token=${this.props.user.token}`
+      }
+    })
       .then(res => this.setState({ phones: res.data.phones }))
       .catch(console.error)
   }
@@ -22,9 +27,9 @@ class Phones extends Component {
   render () {
     console.log(this.state.phones)
 
-    const phones = this.state.phones.map(phones => (
-      <li key={phones.id}>
-        <Link to={`/phones/${phones.id}`}>{phones.title}</Link>
+    const phones = this.state.phones.map(phone => (
+      <li key={phone._id}>
+        <Link to={`/phones/${phone._id}`}>{phone.company}: {phone.model}</Link>
       </li>
     ))
 

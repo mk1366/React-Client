@@ -1,23 +1,60 @@
-import React, { useState, useEffect } from 'react'
-import { withRouter, Link, Redirect } from 'react-router-dom'
+import React from 'react'
+import { withRouter, Link } from 'react-router-dom'
 import axios from 'axios'
 
 import apiUrl from '../../apiConfig'
 
+class Phone extends React.Component {
+  constructor (props) {
+    super(props)
 
-const Perform = ({ user, alerts, match }) => {
-  const [phone, setPhone] = useState()
+    this.state = {
+      phone: {}
+    }
+  }
 
-  useEffect(() => {
+  componentDidMount () {
     axios({
       method: 'GET',
-      url: `${apiUrl}/performances/${match.params.id}`,
+      url: `${apiUrl}/phones/${this.props.match.params.id}`,
       headers: {
-        'Authorization': `Token token=${user.token}`
+        'Authorization': `Token token=${this.props.user.token}`
       }
     })
-      .then(responseData => setPerform(responseData.data.performance))
+      .then(responseData => this.setState({ phone: responseData.data.phone }))
       .catch(console.error)
-  }, [])
+  }
 
-export default withRouter(phone)
+  render () {
+    console.log(this.state.phone)
+
+    return (
+      <React.Fragment>
+        <ul>
+          <li>Company: {this.state.phone.company}</li>
+          <li>Model: {this.state.phone.model}</li>
+          <li>Description: {this.state.phone.description}</li>
+          <li>Price: {this.state.phone.price}</li>
+          <li><Link to={`/update-phone/${this.state.phone._id}`}> Update a Phone</Link></li>
+        </ul>
+      </React.Fragment>
+    )
+  }
+}
+
+// const Phone = ({ user, alerts, match }) => {
+//   const [phone, setPhone] = useState()
+//
+//   useEffect(() => {
+//     axios({
+//       method: 'GET',
+//       url: `${apiUrl}/phones/${match.params.id}`,
+//       headers: {
+//         'Authorization': `Token token=${user.token}`
+//       }
+//     })
+//       .then(responseData => setPerform(responseData.data.performance))
+//       .catch(console.error)
+//   }, [])
+
+export default withRouter(Phone)

@@ -9,6 +9,7 @@ import SignIn from '../SignIn/SignIn'
 import SignOut from '../SignOut/SignOut'
 import ChangePassword from '../ChangePassword/ChangePassword'
 
+import Phone from '../phones/Phone'
 import Phones from '../phones/Phones'
 import PhoneCreate from '../phones/PhoneCreate'
 import PhoneUpdate from '../phones/PhoneUpdate'
@@ -58,13 +59,16 @@ class App extends Component {
           <AuthenticatedRoute user={user} path='/change-password' render={() => (
             <ChangePassword alert={this.alert} user={user} />
           )} />
-          <AuthenticatedRoute user={user} path='/phones' render={() => (
+          <AuthenticatedRoute user={user} exact path='/phones' render={() => (
             <Phones alert={this.alert} user={user} />
+          )} />
+          <AuthenticatedRoute user={user} path='/phones/:id' render={() => (
+            <Phone alert={this.alert} user={user} />
           )} />
           <AuthenticatedRoute user={user} path='/create-phone' render={() => (
             <PhoneCreate alert={this.alert} user={user} />
           )} />
-          <AuthenticatedRoute user={user} path='/update-phone' render={() => (
+          <AuthenticatedRoute user={user} path='/update-phone/:id' render={() => (
             <PhoneUpdate alert={this.alert} user={user} />
           )} />
         </main>
